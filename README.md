@@ -115,7 +115,9 @@ cat plugins/ralph-wiggum/.claude-plugin/plugin.json
 
 | 类别 | 数量 |
 |------|------|
-| TypeScript 源码 | 1,884 文件 |
+| TypeScript 源码 (.ts + .tsx) | 1,884 文件 |
+| JavaScript 源码 (.js) | 18 文件 |
+| 所有源码文件总计 | 1,902 文件 |
 | 工具实现 | 30+ 个 |
 | 命令实现 | 50+ 个 |
 | 服务模块 | 15+ 个 |
