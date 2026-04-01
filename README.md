@@ -113,6 +113,17 @@ node package/cli.js
 # 设置环境变量后运行
 $env:ANTHROPIC_API_KEY="sk-ant-..."  # PowerShell
 node package/cli.js
+
+# 方式三：第三方代理（国内推荐）
+# 创建配置文件 my-settings.json：
+# {
+#   "env": {
+#     "ANTHROPIC_BASE_URL": "https://你的代理地址",
+#     "ANTHROPIC_AUTH_TOKEN": "sk-你的密钥"
+#   }
+# }
+# 然后运行：
+node package/cli.js --settings my-settings.json
 ```
 
 ---
@@ -173,6 +184,85 @@ node package/cli.js -r <session-id>
 ---
 
 ## ⚙️ 常用配置
+
+### 🔑 配置自己的 API（第三方代理 / 自定义端点）
+
+如果你使用第三方 API 代理服务或有自定义端点，可以这样配置：
+
+#### 方式一：通过 Settings 文件（推荐，持久化）
+
+1. 创建配置文件：
+
+```json
+// my-settings.json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://你的代理地址",
+    "ANTHROPIC_AUTH_TOKEN": "sk-你的API密钥"
+  }
+}
+```
+
+2. 运行时加载配置：
+
+```bash
+node package/cli.js --settings my-settings.json
+```
+
+#### 方式二：通过环境变量（临时）
+
+```powershell
+# PowerShell
+$env:ANTHROPIC_BASE_URL = "https://你的代理地址"
+$env:ANTHROPIC_AUTH_TOKEN = "sk-你的API密钥"
+node package/cli.js
+```
+
+```bash
+# CMD
+set ANTHROPIC_BASE_URL=https://你的代理地址
+set ANTHROPIC_AUTH_TOKEN=sk-你的API密钥
+node package/cli.js
+```
+
+#### 方式三：通过全局配置目录
+
+Claude Code 会自动读取 `~/.claude/settings.json`：
+
+```json
+// C:\Users\你的用户名\.claude\settings.json  (Windows)
+// ~/.claude/settings.json  (macOS/Linux)
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://你的代理地址",
+    "ANTHROPIC_AUTH_TOKEN": "sk-你的API密钥"
+  }
+}
+```
+
+配置后每次运行 `node package/cli.js` 都会自动使用这些设置。
+
+#### 支持的模型别名
+
+```bash
+# 常用模型
+node package/cli.js --model sonnet     # Claude Sonnet（默认）
+node package/cli.js --model opus       # Claude Opus（最强）
+node package/cli.js --model haiku      # Claude Haiku（最快）
+
+# 指定完整模型名
+node package/cli.js --model claude-sonnet-4-6
+node package/cli.js --model claude-opus-4-6
+```
+
+#### ⚠️ 注意事项
+
+- 第三方代理可能不支持所有模型，请以代理方提供的模型列表为准
+- `ANTHROPIC_AUTH_TOKEN` 和 `ANTHROPIC_API_KEY` 任选其一即可
+- 如果同时设置了环境变量和 settings 文件，环境变量优先级更高
+- **不要在公开仓库分享包含 API Key 的配置文件**
+
+---
 
 ### 选择模型
 
@@ -285,6 +375,18 @@ node package/cli.js
 
 ### Q: 如何查看花了多少钱？
 A: 在交互模式下输入 `/cost` 或 `/stats` 查看。
+
+### Q: 如何配置第三方代理或自定义 API？
+A: 创建 `my-settings.json` 文件，内容如下：
+```json
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://你的代理地址",
+    "ANTHROPIC_AUTH_TOKEN": "sk-你的密钥"
+  }
+}
+```
+然后运行 `node package/cli.js --settings my-settings.json`。也可以放到 `~/.claude/settings.json` 实现全局配置。
 
 ### Q: 可以在任何目录运行吗？
 A: 可以！但建议在你的项目目录下运行，这样 Claude 可以访问项目文件。
